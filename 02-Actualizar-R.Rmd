@@ -1,0 +1,32 @@
+##Actualizar paquetes
+
+Actualizar un sistema en R, no es facil hacerlo correctamente.
+
+Los paquetes en general, "dependen" unos de otros, y de muchas maneras.
+
+Aveces un paquete necesita usar la funcion de otro, otra forma es que para el paquete poder ser instalado, necesita ser compilado, es cuando un programa traduce el codigo, a lenguaje maquina, muchos paquetes tambien dependen de otros en esa fase.
+
+Pongamos de ejemplo el siguiente el paquete rgdal, este depende del paquete sp.
+
+Digamos que instalamos rgdal-version-1, y este instala sp-version-1, todo funcionara perfecto, sin embargo, sin previo aviso, sp lanza una version 2, R al actualizar, volver a instalar la nueva version, sin embargo, rgdal dependia de sp, eso significa que tienen un "vinculo", internamente se conectan, y no con cualquier sp, con sp-version-1, se instala primero sp al instalar rgdal por que si no esta, no se puede construir rgdal, si cambiamos la version, hay que reconstruir rgdal, pero R no se da cuenta de eso, debido a eso, al actualizar sp, rgdal puede dejar de funcionar.
+
+Esto es un problema cuando queremos usar R, y no hay una solucion hermosa o automatica para esto, asi que, se presentan las siguientes alternativas.
+
+#Si ningun paquete depende de otro para constuirse, esto funciona
+update.packages()
+
+#Si algun paquete depende de otro para construirse, tiramos los dados para que funcione
+update.packages(ask=FALSE, checkBuilt=TRUE)
+
+Estos dos metodos, son los que no deberiamos usar, los dos siguientes son los mas recomendados, mas recomendado el segundo metodo antes que el primero.
+
+#Desinstalar todo, y volver a instalar de 0
+packs<-as.data.frame(installed.packages())$Package
+remove.packages(packs)
+install.packages(packs)
+
+#Metodo ideal para actualizar, desinstalar todo, y solo instalar los paquetes que necesitamos
+#asi mantenemos el entorno limpio por si instalamos algo que ya no necesitamos
+packs<-as.data.frame(installed.packages())$Package
+remove.packages(packs)
+install.packages(c("rgdal", "sf))
