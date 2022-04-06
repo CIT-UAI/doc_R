@@ -1,19 +1,19 @@
 ## R con SQL
 
-Se recomienda leer el primer capitulo introductorio a SQL antes de la siguiente seccion
+Se recomienda leer el primer capitulo introductorio a SQL antes de la siguiente sección.
 
 ### Conectarse al servidor
 
-Anteriormente usabamos st_read para leer archivos, ahora necesitaremos una pieza de codigo que se llama conexion.
+Anteriormente usábamos st_read para leer archivos, ahora necesitaremos una pieza de código que se llama conexión.
 
-Es quien le dira al paquete sf y a R como acceder al servidor.
+Es quien le dirá al paquete sf y a R cómo acceder al servidor para que luego podamos recuperar datos, tambien pueden pensarlo como una forma de indicar la ruta del archivo, solo que como esta en otro PC, necesitaremos credenciales para que nos de los datos.
 
-```
+```R
 library(sf)
 library(DBI)
 library(RPostgres)
 
-# create connection to postgres
+# Crear coneccion a PostgreSQL
 con <- dbConnect(RPostgres::Postgres(),
                  host = 'localhost', # IP/Nombre de la pagina donde esta el servidor
                  port = 5432, # Postgres usualmente usa este numero, solo cambiar si el servidor usa otro
@@ -23,33 +23,34 @@ con <- dbConnect(RPostgres::Postgres(),
 )
 ```
 
-Todos estos datos, deben ser dados con anterioridad para que te puedas conectar, es el nuevo equivalente a pasarte un archivo shp.
+Todos estos datos, deben ser dados con anterioridad para que te puedas contactar, es el nuevo equivalente a pasarte un archivo shp.
 
-Como notaras, hay usuarios y claves, esto es por que cada usuario puede tener permisos diferentes.
-Por mas que sea practico poder acceder a todos los datos, hay que tener espcialcuidado con cambiar
+Como notarás, hay usuarios y claves, esto es por que cada usuario puede tener permisos diferentes.
+Por mas que sea práctico poder acceder a todos los datos, hay que tener especial cuidado con cambiar
 una base de datos de forma accidental, una forma de evitar esto es usando un usuario que solo puede leer datos.
 
-Inevitablemente habra que aprender un poco de SQL para gestionar la información, pero no te preocupes, que las funciones de SQL tienen casi los mismos nombres que en R.
+Inevitablemente habrá que aprender un poco de SQL para gestionar la información, pero no te preocupes, que las funciones de SQL tienen casi los mismos nombres que en R.
 
-SQL es un lenguaje para consultar y procesar grandes cantidades de información, debido a eso, la palabra que se usa es "Consulta", donde literalmente consultamos datos, una consulta puede no solo leer, ademas puede pedir tranformaciones y diferentes funciones al servidor.
+SQL es un lenguaje para consultar y procesar grandes cantidades de información, debido a eso, la palabra que se usa es "Consulta", donde literalmente consultamos datos, una consulta puede no solo leer, además puede pedir aplicar transformaciones a datos y diferentes funciones al servidor.
 
-Las consultas esan el lenguaje de programacion SQL, R tiene varias formas de simplificar esto sin tener que usar casi nada el lenguaje, aun asi lo necesitaremos un poco.
+Las consultas esan el lenguaje de programación SQL, R tiene varias formas de simplificar esto sin tener que usar casi nada el lenguaje, aun así lo necesitaremos un poco.
 
 Para leer una tabla se hace de la siguiente manera:
 
-```
+```R
 x<-st_read(con, query="SELECT * FROM comunas_chile
 ")
 ```
 
 Vamos paso a paso
-    - con: la variable que asignamos arriba, es la "ruta del archivo" en este caso de la conexion a la base de dato s
-    - query: "Consulta" en español, aqui se escribe en lenguaje SQL para obtener datos
-        - SELECT: Seleccionar columnas, * significa todas, si ponemos alguna columna, solo se pedira esa
-        - FROM: De que tabla vamos a leer, ¿se nota? no hay esquema, asi que lee por defecto el esquema "public", un equivalente seria usar "public.comunas_chile"
+    - con: la variable que asignamos arriba, es la "ruta del archivo" en este caso de la conexión a la base de dato s
+    - query: "Consulta" en español, aquí se escribe en lenguaje SQL para obtener datos
+        - SELECT: Seleccionar columnas, * significa todas, si ponemos alguna columna, solo se pedirá esa
+        - FROM: De qué tabla vamos a leer, ¿se nota? no hay esquema, así que lee por defecto el esquema "public", un equivalente sería usar "public.comunas_chile"
 
-Ahora, una vez ejecutada esa linea, la variable x, tendra los datos de las comunas de chile.
+Ahora, una vez ejecutada esa línea, la variable x, tendrá los datos de las comunas de Chile.
 
-Aprender SQL no es necesario para usar las bases de datos desde R, no mucho mas haya despues de esto, hay paquetes de R que dan ayuda.
+Aprender SQL no es necesario para usar las bases de datos desde R, no mucho más allá después de esto, hay paquetes de R que dan ayuda.
 
-Aun así, aprender SQL es una muy buena opcion si quieres poder obtener una gran gestion de datos y una buena eficiencia.
+Aun así, aprender SQL es una muy buena opción si quieres poder obtener una gran gestión de datos y una buena eficiencia.
+
